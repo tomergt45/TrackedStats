@@ -8,11 +8,11 @@ TrackedObject::TrackedObject(const std::string& name_, bool active) :
 {
 }
 
-void TrackedObject::Render(const GameWrapper& gameWrapper) const
+void TrackedObject::Render() const
 {
 	for (const auto& stat : stats_)
 	{
-		const auto statVal = stat.getter_(gameWrapper);
+		const auto statVal = stat.getter_();
 
 		ImGui::Text(stat.name_.c_str());
 		ImGui::SameLine();
@@ -26,7 +26,8 @@ void TrackedObject::Track(const TrackedStat& tracked_stat)
 }
 
 void TrackedObject::Track(const std::string& name,
-	const std::function<int(const GameWrapper& gameWrapper)>& getter)
+	const std::function<int()>& func)
 {
-	Track({ name, getter });
+	Track({ name, func });
 }
+

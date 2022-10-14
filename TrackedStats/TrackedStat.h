@@ -3,6 +3,6 @@
 struct TrackedStat
 {
 	std::string name_;
-	std::function<int(const GameWrapper& gameWrapper)> getter_;
+	std::function<int()> getter_;
 };
 

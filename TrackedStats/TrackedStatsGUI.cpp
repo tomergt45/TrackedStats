@@ -34,7 +34,7 @@ void TrackedStats::Render()
 		if (ImGui::Begin(tracker.name_.c_str(), &tracker.active_,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
 		{
-			tracker.Render(*gameWrapper);
+			tracker.Render();
 		}
 		ImGui::End();
 	}
