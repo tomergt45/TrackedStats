@@ -15,12 +15,15 @@ public:
 public:
 	void Render() const;
 	void Track(const TrackedStat& tracked_stat);
-	void Track(const std::string& name, const std::function<int()>& func);
+	void Hook(std::shared_ptr<GameWrapper> game_wrapper, const std::string& event_name, const std::function<int()>& callback);
+
+private:
+	void Hook_Func(std::string event_name, const std::function<int()>& callback);
 
 public:
 	bool active_;
 	std::string name_;
 	std::vector<TrackedStat> stats_;
-	std::vector<int> samples_;
+	std::deque<int> data_;
 };
 

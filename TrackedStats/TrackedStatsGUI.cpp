@@ -29,13 +29,16 @@ void TrackedStats::RenderSettings() {
 // Do ImGui rendering here
 void TrackedStats::Render()
 {
-	for (auto& tracker : trackers)
+	for (const auto& tracker : trackers)
 	{
-		if (ImGui::Begin(tracker.name_.c_str(), &tracker.active_,
+		if (!ImGui::Begin(tracker.name_.c_str(), NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
 		{
-			tracker.Render();
+			ImGui::End();
 		}
+
+		tracker.Render();
+		
 		ImGui::End();
 	}
 }

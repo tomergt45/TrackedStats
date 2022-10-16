@@ -1,19 +1,41 @@
 #include "pch.h"
-#include "TrackedStats.h"
 
-#include <numeric>
+#include "TrackedStats.h"
+#include "Helpers.h"
 
 void TrackedStats::loadTrackers()
 {
-	TrackedObject boost_tracker{ "Boost" };
-	boost_tracker.Track("Average Boost", [boost_tracker]()
+	static TrackedObject boost_tracker{ "Boost" };
+
+	boost_tracker.Hook(gameWrapper, "Function Engine.GameViewportClient.Tick",
+		[&]()
 		{
-			const auto& samples = boost_tracker.samples_;
-			return std::reduce(samples.begin(), samples.end()) / samples.size();
+			if (!gameWrapper->IsInGame())
+			{
+				return NULL;
+			}
+
+			auto car = gameWrapper->GetLocalCar();
+			auto boost = car.GetBoostComponent();
+			auto boost_amount = boost.GetCurrentBoostAmount() * 100;
+
+			return (int)(boost_amount);
+		});
+
+	boost_tracker.Track({
+			"Average Boost",
+			std::bind(helpers::Average, std::ref(boost_tracker.data_))
+		}
+	);
+	boost_tracker.Track({
+			"Min Boost",
+			std::bind(helpers::Min, std::ref(boost_tracker.data_))
+		}
+	);
+	boost_tracker.Track({
+			"Max Boost",
+			std::bind(helpers::Max, std::ref(boost_tracker.data_))
 		}
 	);
 	trackers.push_back(boost_tracker);
-
-	TrackedObject powerslide_tracker{ "Powerslide" };
-	trackers.push_back(powerslide_tracker);
 }
