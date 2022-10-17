@@ -133,6 +133,7 @@
     <ClInclude Include="TrackedObject.h" />
     <ClInclude Include="TrackedStat.h" />
     <ClInclude Include="TrackedStats.h" />
+    <ClInclude Include="Trackers.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>

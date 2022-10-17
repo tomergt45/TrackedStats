@@ -34,4 +34,10 @@ namespace helpers
 
 		return *std::max_element(vec.begin(), vec.end());
 	}
+
+	static int Size(const std::deque<int>& vec)
+	{
+		return vec.size();
+	}
+
 }

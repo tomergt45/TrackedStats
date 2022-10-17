@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TrackedObject.h"
 #include "TrackedStats.h"
+#include "Trackers.h";
 
 TrackedObject::TrackedObject(const std::string& name_, bool active) :
 	name_{ name_ },
@@ -10,9 +11,9 @@ TrackedObject::TrackedObject(const std::string& name_, bool active) :
 {
 }
 
-void TrackedObject::Render() const
+void TrackedObject::Render()
 {
-	for (const auto& stat : stats_)
+	for (const auto& stat : this->stats_)
 	{
 		const auto statVal = stat.getter_();
 
@@ -24,7 +25,7 @@ void TrackedObject::Render() const
 
 void TrackedObject::Track(const TrackedStat& tracked_stat)
 {
-	stats_.push_back(tracked_stat);
+	this->stats_.push_back(tracked_stat);
 }
 
 void TrackedObject::Hook(std::shared_ptr<GameWrapper> game_wrapper,
@@ -46,7 +47,7 @@ void TrackedObject::Hook_Func(std::string event_name, const std::function<int()>
 		return;
 	}
 
-	if (data_.size() > 5000)
+	while (data_.size() > data_size_)
 	{
 		data_.pop_front();
 	}

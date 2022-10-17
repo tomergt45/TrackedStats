@@ -15,13 +15,14 @@ void TrackedStats::SetImGuiContext(uintptr_t ctx) {
 //  f2 -> plugins -> TrackedStats
 void TrackedStats::RenderSettings() {
 	ImGui::TextUnformatted("TrackedStats plugin settings");
-	ImGui::TextUnformatted("Configure which stats you want to track.");
+	ImGui::TextUnformatted("Configure the stats you want to track.");
 
-	for (auto& tracker : trackers)
+	for (auto& tracker : trackers::trackers)
 	{
-		if (ImGui::CollapsingHeader(tracker.name_.c_str()))
+		if (ImGui::CollapsingHeader(tracker->name_.c_str()))
 		{
-			ImGui::Checkbox("Activated", &tracker.active_);
+			ImGui::Checkbox("Activated", &tracker->active_);
+			ImGui::InputInt("Data Size", &tracker->data_size_);
 		}
 	}
 }
@@ -29,16 +30,13 @@ void TrackedStats::RenderSettings() {
 // Do ImGui rendering here
 void TrackedStats::Render()
 {
-	for (const auto& tracker : trackers)
+	for (const auto& tracker : trackers::trackers)
 	{
-		if (!ImGui::Begin(tracker.name_.c_str(), NULL,
+		if (ImGui::Begin(tracker->name_.c_str(), NULL,
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
 		{
-			ImGui::End();
+			tracker->Render();
 		}
-
-		tracker.Render();
-		
 		ImGui::End();
 	}
 }
